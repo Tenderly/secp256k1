@@ -25,13 +25,13 @@ static void default_error_callback_fn(const char* str, void* data) {
     abort();
 }
 
-static const secp256k1_callback default_error_callback = {
+static const lw_secp256k1_callback default_error_callback = {
     default_error_callback_fn,
     NULL
 };
 
 int main(int argc, char **argv) {
-    secp256k1_ecmult_gen_context ctx;
+    lw_secp256k1_ecmult_gen_context ctx;
     void *prealloc, *base;
     int inner;
     int outer;
@@ -46,23 +46,23 @@ int main(int argc, char **argv) {
         return -1;
     }
 
-    fprintf(fp, "#ifndef _SECP256K1_ECMULT_STATIC_CONTEXT_\n");
-    fprintf(fp, "#define _SECP256K1_ECMULT_STATIC_CONTEXT_\n");
+    fprintf(fp, "#ifndef _lw_secp256k1_ECMULT_STATIC_CONTEXT_\n");
+    fprintf(fp, "#define _lw_secp256k1_ECMULT_STATIC_CONTEXT_\n");
     fprintf(fp, "#include \"src/group.h\"\n");
-    fprintf(fp, "#define SC SECP256K1_GE_STORAGE_CONST\n");
+    fprintf(fp, "#define SC lw_secp256k1_GE_STORAGE_CONST\n");
     fprintf(fp, "#if ECMULT_GEN_PREC_N != %d || ECMULT_GEN_PREC_G != %d\n", ECMULT_GEN_PREC_N, ECMULT_GEN_PREC_G);
     fprintf(fp, "   #error configuration mismatch, invalid ECMULT_GEN_PREC_N, ECMULT_GEN_PREC_G. Try deleting ecmult_static_context.h before the build.\n");
     fprintf(fp, "#endif\n");
-    fprintf(fp, "static const secp256k1_ge_storage secp256k1_ecmult_static_context[ECMULT_GEN_PREC_N][ECMULT_GEN_PREC_G] = {\n");
+    fprintf(fp, "static const lw_secp256k1_ge_storage lw_secp256k1_ecmult_static_context[ECMULT_GEN_PREC_N][ECMULT_GEN_PREC_G] = {\n");
 
-    base = checked_malloc(&default_error_callback, SECP256K1_ECMULT_GEN_CONTEXT_PREALLOCATED_SIZE);
+    base = checked_malloc(&default_error_callback, lw_secp256k1_ECMULT_GEN_CONTEXT_PREALLOCATED_SIZE);
     prealloc = base;
-    secp256k1_ecmult_gen_context_init(&ctx);
-    secp256k1_ecmult_gen_context_build(&ctx, &prealloc);
+    lw_secp256k1_ecmult_gen_context_init(&ctx);
+    lw_secp256k1_ecmult_gen_context_build(&ctx, &prealloc);
     for(outer = 0; outer != ECMULT_GEN_PREC_N; outer++) {
         fprintf(fp,"{\n");
         for(inner = 0; inner != ECMULT_GEN_PREC_G; inner++) {
-            fprintf(fp,"    SC(%uu, %uu, %uu, %uu, %uu, %uu, %uu, %uu, %uu, %uu, %uu, %uu, %uu, %uu, %uu, %uu)", SECP256K1_GE_STORAGE_CONST_GET((*ctx.prec)[outer][inner]));
+            fprintf(fp,"    SC(%uu, %uu, %uu, %uu, %uu, %uu, %uu, %uu, %uu, %uu, %uu, %uu, %uu, %uu, %uu, %uu)", lw_secp256k1_GE_STORAGE_CONST_GET((*ctx.prec)[outer][inner]));
             if (inner != ECMULT_GEN_PREC_G - 1) {
                 fprintf(fp,",\n");
             } else {
@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
         }
     }
     fprintf(fp,"};\n");
-    secp256k1_ecmult_gen_context_clear(&ctx);
+    lw_secp256k1_ecmult_gen_context_clear(&ctx);
     free(base);
 
     fprintf(fp, "#undef SC\n");

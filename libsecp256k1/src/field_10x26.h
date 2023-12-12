@@ -4,8 +4,8 @@
  * file COPYING or http://www.opensource.org/licenses/mit-license.php.*
  **********************************************************************/
 
-#ifndef SECP256K1_FIELD_REPR_H
-#define SECP256K1_FIELD_REPR_H
+#ifndef lw_secp256k1_FIELD_REPR_H
+#define lw_secp256k1_FIELD_REPR_H
 
 #include <stdint.h>
 
@@ -18,10 +18,10 @@ typedef struct {
     int magnitude;
     int normalized;
 #endif
-} secp256k1_fe;
+} lw_secp256k1_fe;
 
 /* Unpacks a constant into a overlapping multi-limbed FE element. */
-#define SECP256K1_FE_CONST_INNER(d7, d6, d5, d4, d3, d2, d1, d0) { \
+#define lw_secp256k1_FE_CONST_INNER(d7, d6, d5, d4, d3, d2, d1, d0) { \
     (d0) & 0x3FFFFFFUL, \
     (((uint32_t)d0) >> 26) | (((uint32_t)(d1) & 0xFFFFFUL) << 6), \
     (((uint32_t)d1) >> 20) | (((uint32_t)(d2) & 0x3FFFUL) << 12), \
@@ -35,16 +35,16 @@ typedef struct {
 }
 
 #ifdef VERIFY
-#define SECP256K1_FE_CONST(d7, d6, d5, d4, d3, d2, d1, d0) {SECP256K1_FE_CONST_INNER((d7), (d6), (d5), (d4), (d3), (d2), (d1), (d0)), 1, 1}
+#define lw_secp256k1_FE_CONST(d7, d6, d5, d4, d3, d2, d1, d0) {lw_secp256k1_FE_CONST_INNER((d7), (d6), (d5), (d4), (d3), (d2), (d1), (d0)), 1, 1}
 #else
-#define SECP256K1_FE_CONST(d7, d6, d5, d4, d3, d2, d1, d0) {SECP256K1_FE_CONST_INNER((d7), (d6), (d5), (d4), (d3), (d2), (d1), (d0))}
+#define lw_secp256k1_FE_CONST(d7, d6, d5, d4, d3, d2, d1, d0) {lw_secp256k1_FE_CONST_INNER((d7), (d6), (d5), (d4), (d3), (d2), (d1), (d0))}
 #endif
 
 typedef struct {
     uint32_t n[8];
-} secp256k1_fe_storage;
+} lw_secp256k1_fe_storage;
 
-#define SECP256K1_FE_STORAGE_CONST(d7, d6, d5, d4, d3, d2, d1, d0) {{ (d0), (d1), (d2), (d3), (d4), (d5), (d6), (d7) }}
-#define SECP256K1_FE_STORAGE_CONST_GET(d) d.n[7], d.n[6], d.n[5], d.n[4],d.n[3], d.n[2], d.n[1], d.n[0]
+#define lw_secp256k1_FE_STORAGE_CONST(d7, d6, d5, d4, d3, d2, d1, d0) {{ (d0), (d1), (d2), (d3), (d4), (d5), (d6), (d7) }}
+#define lw_secp256k1_FE_STORAGE_CONST_GET(d) d.n[7], d.n[6], d.n[5], d.n[4],d.n[3], d.n[2], d.n[1], d.n[0]
 
-#endif /* SECP256K1_FIELD_REPR_H */
+#endif /* lw_secp256k1_FIELD_REPR_H */

@@ -4,8 +4,8 @@
  * file COPYING or http://www.opensource.org/licenses/mit-license.php.*
  **********************************************************************/
 
-#ifndef SECP256K1_ECMULT_H
-#define SECP256K1_ECMULT_H
+#ifndef lw_secp256k1_ECMULT_H
+#define lw_secp256k1_ECMULT_H
 
 #include "num.h"
 #include "group.h"
@@ -14,23 +14,23 @@
 
 typedef struct {
     /* For accelerating the computation of a*P + b*G: */
-    secp256k1_ge_storage (*pre_g)[];    /* odd multiples of the generator */
+    lw_secp256k1_ge_storage (*pre_g)[];    /* odd multiples of the generator */
 #ifdef USE_ENDOMORPHISM
-    secp256k1_ge_storage (*pre_g_128)[]; /* odd multiples of 2^128*generator */
+    lw_secp256k1_ge_storage (*pre_g_128)[]; /* odd multiples of 2^128*generator */
 #endif
-} secp256k1_ecmult_context;
+} lw_secp256k1_ecmult_context;
 
-static const size_t SECP256K1_ECMULT_CONTEXT_PREALLOCATED_SIZE;
-static void secp256k1_ecmult_context_init(secp256k1_ecmult_context *ctx);
-static void secp256k1_ecmult_context_build(secp256k1_ecmult_context *ctx, void **prealloc);
-static void secp256k1_ecmult_context_finalize_memcpy(secp256k1_ecmult_context *dst, const secp256k1_ecmult_context *src);
-static void secp256k1_ecmult_context_clear(secp256k1_ecmult_context *ctx);
-static int secp256k1_ecmult_context_is_built(const secp256k1_ecmult_context *ctx);
+static const size_t lw_secp256k1_ECMULT_CONTEXT_PREALLOCATED_SIZE;
+static void lw_secp256k1_ecmult_context_init(lw_secp256k1_ecmult_context *ctx);
+static void lw_secp256k1_ecmult_context_build(lw_secp256k1_ecmult_context *ctx, void **prealloc);
+static void lw_secp256k1_ecmult_context_finalize_memcpy(lw_secp256k1_ecmult_context *dst, const lw_secp256k1_ecmult_context *src);
+static void lw_secp256k1_ecmult_context_clear(lw_secp256k1_ecmult_context *ctx);
+static int lw_secp256k1_ecmult_context_is_built(const lw_secp256k1_ecmult_context *ctx);
 
 /** Double multiply: R = na*A + ng*G */
-static void secp256k1_ecmult(const secp256k1_ecmult_context *ctx, secp256k1_gej *r, const secp256k1_gej *a, const secp256k1_scalar *na, const secp256k1_scalar *ng);
+static void lw_secp256k1_ecmult(const lw_secp256k1_ecmult_context *ctx, lw_secp256k1_gej *r, const lw_secp256k1_gej *a, const lw_secp256k1_scalar *na, const lw_secp256k1_scalar *ng);
 
-typedef int (secp256k1_ecmult_multi_callback)(secp256k1_scalar *sc, secp256k1_ge *pt, size_t idx, void *data);
+typedef int (lw_secp256k1_ecmult_multi_callback)(lw_secp256k1_scalar *sc, lw_secp256k1_ge *pt, size_t idx, void *data);
 
 /**
  * Multi-multiply: R = inp_g_sc * G + sum_i ni * Ai.
@@ -43,6 +43,6 @@ typedef int (secp256k1_ecmult_multi_callback)(secp256k1_scalar *sc, secp256k1_ge
  *          0 if there is not enough scratch space for a single point or
  *          callback returns 0
  */
-static int secp256k1_ecmult_multi_var(const secp256k1_callback* error_callback, const secp256k1_ecmult_context *ctx, secp256k1_scratch *scratch, secp256k1_gej *r, const secp256k1_scalar *inp_g_sc, secp256k1_ecmult_multi_callback cb, void *cbdata, size_t n);
+static int lw_secp256k1_ecmult_multi_var(const lw_secp256k1_callback* error_callback, const lw_secp256k1_ecmult_context *ctx, lw_secp256k1_scratch *scratch, lw_secp256k1_gej *r, const lw_secp256k1_scalar *inp_g_sc, lw_secp256k1_ecmult_multi_callback cb, void *cbdata, size_t n);
 
-#endif /* SECP256K1_ECMULT_H */
+#endif /* lw_secp256k1_ECMULT_H */

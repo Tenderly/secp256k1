@@ -4,8 +4,8 @@
  * file COPYING or http://www.opensource.org/licenses/mit-license.php.*
  **********************************************************************/
 
-#ifndef SECP256K1_TESTRAND_IMPL_H
-#define SECP256K1_TESTRAND_IMPL_H
+#ifndef lw_secp256k1_TESTRAND_IMPL_H
+#define lw_secp256k1_TESTRAND_IMPL_H
 
 #include <stdint.h>
 #include <string.h>
@@ -13,38 +13,38 @@
 #include "testrand.h"
 #include "hash.h"
 
-static secp256k1_rfc6979_hmac_sha256 secp256k1_test_rng;
-static uint32_t secp256k1_test_rng_precomputed[8];
-static int secp256k1_test_rng_precomputed_used = 8;
-static uint64_t secp256k1_test_rng_integer;
-static int secp256k1_test_rng_integer_bits_left = 0;
+static lw_secp256k1_rfc6979_hmac_sha256 lw_secp256k1_test_rng;
+static uint32_t lw_secp256k1_test_rng_precomputed[8];
+static int lw_secp256k1_test_rng_precomputed_used = 8;
+static uint64_t lw_secp256k1_test_rng_integer;
+static int lw_secp256k1_test_rng_integer_bits_left = 0;
 
-SECP256K1_INLINE static void secp256k1_rand_seed(const unsigned char *seed16) {
-    secp256k1_rfc6979_hmac_sha256_initialize(&secp256k1_test_rng, seed16, 16);
+lw_secp256k1_INLINE static void lw_secp256k1_rand_seed(const unsigned char *seed16) {
+    lw_secp256k1_rfc6979_hmac_sha256_initialize(&lw_secp256k1_test_rng, seed16, 16);
 }
 
-SECP256K1_INLINE static uint32_t secp256k1_rand32(void) {
-    if (secp256k1_test_rng_precomputed_used == 8) {
-        secp256k1_rfc6979_hmac_sha256_generate(&secp256k1_test_rng, (unsigned char*)(&secp256k1_test_rng_precomputed[0]), sizeof(secp256k1_test_rng_precomputed));
-        secp256k1_test_rng_precomputed_used = 0;
+lw_secp256k1_INLINE static uint32_t lw_secp256k1_rand32(void) {
+    if (lw_secp256k1_test_rng_precomputed_used == 8) {
+        lw_secp256k1_rfc6979_hmac_sha256_generate(&lw_secp256k1_test_rng, (unsigned char*)(&lw_secp256k1_test_rng_precomputed[0]), sizeof(lw_secp256k1_test_rng_precomputed));
+        lw_secp256k1_test_rng_precomputed_used = 0;
     }
-    return secp256k1_test_rng_precomputed[secp256k1_test_rng_precomputed_used++];
+    return lw_secp256k1_test_rng_precomputed[lw_secp256k1_test_rng_precomputed_used++];
 }
 
-static uint32_t secp256k1_rand_bits(int bits) {
+static uint32_t lw_secp256k1_rand_bits(int bits) {
     uint32_t ret;
-    if (secp256k1_test_rng_integer_bits_left < bits) {
-        secp256k1_test_rng_integer |= (((uint64_t)secp256k1_rand32()) << secp256k1_test_rng_integer_bits_left);
-        secp256k1_test_rng_integer_bits_left += 32;
+    if (lw_secp256k1_test_rng_integer_bits_left < bits) {
+        lw_secp256k1_test_rng_integer |= (((uint64_t)lw_secp256k1_rand32()) << lw_secp256k1_test_rng_integer_bits_left);
+        lw_secp256k1_test_rng_integer_bits_left += 32;
     }
-    ret = secp256k1_test_rng_integer;
-    secp256k1_test_rng_integer >>= bits;
-    secp256k1_test_rng_integer_bits_left -= bits;
+    ret = lw_secp256k1_test_rng_integer;
+    lw_secp256k1_test_rng_integer >>= bits;
+    lw_secp256k1_test_rng_integer_bits_left -= bits;
     ret &= ((~((uint32_t)0)) >> (32 - bits));
     return ret;
 }
 
-static uint32_t secp256k1_rand_int(uint32_t range) {
+static uint32_t lw_secp256k1_rand_int(uint32_t range) {
     /* We want a uniform integer between 0 and range-1, inclusive.
      * B is the smallest number such that range <= 2**B.
      * two mechanisms implemented here:
@@ -76,25 +76,25 @@ static uint32_t secp256k1_rand_int(uint32_t range) {
         mult = 1;
     }
     while(1) {
-        uint32_t x = secp256k1_rand_bits(bits);
+        uint32_t x = lw_secp256k1_rand_bits(bits);
         if (x < trange) {
             return (mult == 1) ? x : (x % range);
         }
     }
 }
 
-static void secp256k1_rand256(unsigned char *b32) {
-    secp256k1_rfc6979_hmac_sha256_generate(&secp256k1_test_rng, b32, 32);
+static void lw_secp256k1_rand256(unsigned char *b32) {
+    lw_secp256k1_rfc6979_hmac_sha256_generate(&lw_secp256k1_test_rng, b32, 32);
 }
 
-static void secp256k1_rand_bytes_test(unsigned char *bytes, size_t len) {
+static void lw_secp256k1_rand_bytes_test(unsigned char *bytes, size_t len) {
     size_t bits = 0;
     memset(bytes, 0, len);
     while (bits < len * 8) {
         int now;
         uint32_t val;
-        now = 1 + (secp256k1_rand_bits(6) * secp256k1_rand_bits(5) + 16) / 31;
-        val = secp256k1_rand_bits(1);
+        now = 1 + (lw_secp256k1_rand_bits(6) * lw_secp256k1_rand_bits(5) + 16) / 31;
+        val = lw_secp256k1_rand_bits(1);
         while (now > 0 && bits < len * 8) {
             bytes[bits / 8] |= val << (bits % 8);
             now--;
@@ -103,8 +103,8 @@ static void secp256k1_rand_bytes_test(unsigned char *bytes, size_t len) {
     }
 }
 
-static void secp256k1_rand256_test(unsigned char *b32) {
-    secp256k1_rand_bytes_test(b32, 32);
+static void lw_secp256k1_rand256_test(unsigned char *b32) {
+    lw_secp256k1_rand_bytes_test(b32, 32);
 }
 
-#endif /* SECP256K1_TESTRAND_IMPL_H */
+#endif /* lw_secp256k1_TESTRAND_IMPL_H */

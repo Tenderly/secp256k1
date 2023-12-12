@@ -25,8 +25,8 @@
  * library are sufficient.
  */
 
-#ifndef SECP256K1_CONTRIB_BER_PRIVATEKEY_H
-#define SECP256K1_CONTRIB_BER_PRIVATEKEY_H
+#ifndef lw_secp256k1_CONTRIB_BER_PRIVATEKEY_H
+#define lw_secp256k1_CONTRIB_BER_PRIVATEKEY_H
 
 #include <secp256k1.h>
 
@@ -52,15 +52,15 @@ extern "C" {
  *  simple 32-byte private keys are sufficient.
  *
  *  Note that this function does not guarantee correct DER output. It is
- *  guaranteed to be parsable by secp256k1_ec_privkey_import_der
+ *  guaranteed to be parsable by lw_secp256k1_ec_privkey_import_der
  */
-SECP256K1_WARN_UNUSED_RESULT int ec_privkey_export_der(
-    const secp256k1_context* ctx,
+lw_secp256k1_WARN_UNUSED_RESULT int ec_privkey_export_der(
+    const lw_secp256k1_context* ctx,
     unsigned char *privkey,
     size_t *privkeylen,
     const unsigned char *seckey,
     int compressed
-) SECP256K1_ARG_NONNULL(1) SECP256K1_ARG_NONNULL(2) SECP256K1_ARG_NONNULL(3) SECP256K1_ARG_NONNULL(4);
+) lw_secp256k1_ARG_NONNULL(1) lw_secp256k1_ARG_NONNULL(2) lw_secp256k1_ARG_NONNULL(3) lw_secp256k1_ARG_NONNULL(4);
 
 /** Import a private key in DER format.
  * Returns: 1 if a private key was extracted.
@@ -76,15 +76,15 @@ SECP256K1_WARN_UNUSED_RESULT int ec_privkey_export_der(
  * only if you know in advance it is supposed to contain a secp256k1 private
  * key.
  */
-SECP256K1_WARN_UNUSED_RESULT int ec_privkey_import_der(
-    const secp256k1_context* ctx,
+lw_secp256k1_WARN_UNUSED_RESULT int ec_privkey_import_der(
+    const lw_secp256k1_context* ctx,
     unsigned char *seckey,
     const unsigned char *privkey,
     size_t privkeylen
-) SECP256K1_ARG_NONNULL(1) SECP256K1_ARG_NONNULL(2) SECP256K1_ARG_NONNULL(3);
+) lw_secp256k1_ARG_NONNULL(1) lw_secp256k1_ARG_NONNULL(2) lw_secp256k1_ARG_NONNULL(3);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* SECP256K1_CONTRIB_BER_PRIVATEKEY_H */
+#endif /* lw_secp256k1_CONTRIB_BER_PRIVATEKEY_H */

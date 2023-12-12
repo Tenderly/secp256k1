@@ -12,8 +12,8 @@
 #include "bench.h"
 
 typedef struct {
-    secp256k1_context *ctx;
-    secp256k1_pubkey point;
+    lw_secp256k1_context *ctx;
+    lw_secp256k1_pubkey point;
     unsigned char scalar[32];
 } bench_ecdh_data;
 
@@ -31,7 +31,7 @@ static void bench_ecdh_setup(void* arg) {
     for (i = 0; i < 32; i++) {
         data->scalar[i] = i + 1;
     }
-    CHECK(secp256k1_ec_pubkey_parse(data->ctx, &data->point, point, sizeof(point)) == 1);
+    CHECK(lw_secp256k1_ec_pubkey_parse(data->ctx, &data->point, point, sizeof(point)) == 1);
 }
 
 static void bench_ecdh(void* arg, int iters) {
@@ -40,7 +40,7 @@ static void bench_ecdh(void* arg, int iters) {
     bench_ecdh_data *data = (bench_ecdh_data*)arg;
 
     for (i = 0; i < iters; i++) {
-        CHECK(secp256k1_ecdh(data->ctx, res, &data->point, data->scalar, NULL, NULL) == 1);
+        CHECK(lw_secp256k1_ecdh(data->ctx, res, &data->point, data->scalar, NULL, NULL) == 1);
     }
 }
 
@@ -50,10 +50,10 @@ int main(void) {
     int iters = get_iters(20000);
 
     /* create a context with no capabilities */
-    data.ctx = secp256k1_context_create(SECP256K1_FLAGS_TYPE_CONTEXT);
+    data.ctx = lw_secp256k1_context_create(lw_secp256k1_FLAGS_TYPE_CONTEXT);
 
     run_benchmark("ecdh", bench_ecdh, bench_ecdh_setup, NULL, &data, 10, iters);
 
-    secp256k1_context_destroy(data.ctx);
+    lw_secp256k1_context_destroy(data.ctx);
     return 0;
 }

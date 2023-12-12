@@ -3,9 +3,9 @@ AC_INIT([libsecp256k1],[0.1])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([build-aux/m4])
 AC_CANONICAL_HOST
-AH_TOP([#ifndef LIBSECP256K1_CONFIG_H])
-AH_TOP([#define LIBSECP256K1_CONFIG_H])
-AH_BOTTOM([#endif /*LIBSECP256K1_CONFIG_H*/])
+AH_TOP([#ifndef LIBlw_secp256k1_CONFIG_H])
+AH_TOP([#define LIBlw_secp256k1_CONFIG_H])
+AH_BOTTOM([#endif /*LIBlw_secp256k1_CONFIG_H*/])
 AM_INIT_AUTOMAKE([foreign subdir-objects])
 
 # Set -g if CFLAGS are not already set, which matches the default autoconf

@@ -4,8 +4,8 @@
  * file COPYING or http://www.opensource.org/licenses/mit-license.php.*
  **********************************************************************/
 
-#ifndef SECP256K1_UTIL_H
-#define SECP256K1_UTIL_H
+#ifndef lw_secp256k1_UTIL_H
+#define lw_secp256k1_UTIL_H
 
 #if defined HAVE_CONFIG_H
 #include "libsecp256k1-config.h"
@@ -19,9 +19,9 @@
 typedef struct {
     void (*fn)(const char *text, void* data);
     const void* data;
-} secp256k1_callback;
+} lw_secp256k1_callback;
 
-static SECP256K1_INLINE void secp256k1_callback_call(const secp256k1_callback * const cb, const char * const text) {
+static lw_secp256k1_INLINE void lw_secp256k1_callback_call(const lw_secp256k1_callback * const cb, const char * const text) {
     cb->fn(text, (void*)cb->data);
 }
 
@@ -37,7 +37,7 @@ static SECP256K1_INLINE void secp256k1_callback_call(const secp256k1_callback * 
 } while(0)
 #endif
 
-#if SECP256K1_GNUC_PREREQ(3, 0)
+#if lw_secp256k1_GNUC_PREREQ(3, 0)
 #define EXPECT(x,c) __builtin_expect((x),(c))
 #else
 #define EXPECT(x,c) (x)
@@ -69,18 +69,18 @@ static SECP256K1_INLINE void secp256k1_callback_call(const secp256k1_callback * 
 #define VERIFY_SETUP(stmt)
 #endif
 
-static SECP256K1_INLINE void *checked_malloc(const secp256k1_callback* cb, size_t size) {
+static lw_secp256k1_INLINE void *checked_malloc(const lw_secp256k1_callback* cb, size_t size) {
     void *ret = malloc(size);
     if (ret == NULL) {
-        secp256k1_callback_call(cb, "Out of memory");
+        lw_secp256k1_callback_call(cb, "Out of memory");
     }
     return ret;
 }
 
-static SECP256K1_INLINE void *checked_realloc(const secp256k1_callback* cb, void *ptr, size_t size) {
+static lw_secp256k1_INLINE void *checked_realloc(const lw_secp256k1_callback* cb, void *ptr, size_t size) {
     void *ret = realloc(ptr, size);
     if (ret == NULL) {
-        secp256k1_callback_call(cb, "Out of memory");
+        lw_secp256k1_callback_call(cb, "Out of memory");
     }
     return ret;
 }
@@ -112,7 +112,7 @@ static SECP256K1_INLINE void *checked_realloc(const secp256k1_callback* cb, void
  * It is VERIFY_CHECKed that there is enough space left in the memory object and
  * *prealloc_ptr is aligned relative to base.
  */
-static SECP256K1_INLINE void *manual_alloc(void** prealloc_ptr, size_t alloc_size, void* base, size_t max_size) {
+static lw_secp256k1_INLINE void *manual_alloc(void** prealloc_ptr, size_t alloc_size, void* base, size_t max_size) {
     size_t aligned_alloc_size = ROUND_TO_ALIGN(alloc_size);
     void* ret;
     VERIFY_CHECK(prealloc_ptr != NULL);
@@ -127,19 +127,19 @@ static SECP256K1_INLINE void *manual_alloc(void** prealloc_ptr, size_t alloc_siz
 }
 
 /* Macro for restrict, when available and not in a VERIFY build. */
-#if defined(SECP256K1_BUILD) && defined(VERIFY)
-# define SECP256K1_RESTRICT
+#if defined(lw_secp256k1_BUILD) && defined(VERIFY)
+# define lw_secp256k1_RESTRICT
 #else
 # if (!defined(__STDC_VERSION__) || (__STDC_VERSION__ < 199901L) )
-#  if SECP256K1_GNUC_PREREQ(3,0)
-#   define SECP256K1_RESTRICT __restrict__
+#  if lw_secp256k1_GNUC_PREREQ(3,0)
+#   define lw_secp256k1_RESTRICT __restrict__
 #  elif (defined(_MSC_VER) && _MSC_VER >= 1400)
-#   define SECP256K1_RESTRICT __restrict
+#   define lw_secp256k1_RESTRICT __restrict
 #  else
-#   define SECP256K1_RESTRICT
+#   define lw_secp256k1_RESTRICT
 #  endif
 # else
-#  define SECP256K1_RESTRICT restrict
+#  define lw_secp256k1_RESTRICT restrict
 # endif
 #endif
 
@@ -153,15 +153,15 @@ static SECP256K1_INLINE void *manual_alloc(void** prealloc_ptr, size_t alloc_siz
 
 #if defined(HAVE___INT128)
 # if defined(__GNUC__)
-#  define SECP256K1_GNUC_EXT __extension__
+#  define lw_secp256k1_GNUC_EXT __extension__
 # else
-#  define SECP256K1_GNUC_EXT
+#  define lw_secp256k1_GNUC_EXT
 # endif
-SECP256K1_GNUC_EXT typedef unsigned __int128 uint128_t;
+lw_secp256k1_GNUC_EXT typedef unsigned __int128 uint128_t;
 #endif
 
 /* Zero memory if flag == 1. Flag must be 0 or 1. Constant time. */
-static SECP256K1_INLINE void memczero(void *s, size_t len, int flag) {
+static lw_secp256k1_INLINE void memczero(void *s, size_t len, int flag) {
     unsigned char *p = (unsigned char *)s;
     /* Access flag with a volatile-qualified lvalue.
        This prevents clang from figuring out (after inlining) that flag can
@@ -175,4 +175,4 @@ static SECP256K1_INLINE void memczero(void *s, size_t len, int flag) {
     }
 }
 
-#endif /* SECP256K1_UTIL_H */
+#endif /* lw_secp256k1_UTIL_H */
